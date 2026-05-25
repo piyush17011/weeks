@@ -8,14 +8,25 @@ const JWT_SECRET = process.env.JWT_SECRET || 'weeks-secret-key';
 const COOKIE_NAME = 'weeks_token';
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  sameSite: 'lax',
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
   secure: process.env.NODE_ENV === 'production',
   maxAge: 30 * 24 * 60 * 60 * 1000,
   path: '/',
 };
 
-const makeToken = (userId) => jwt.sign({ userId }, JWT_SECRET, { expiresIn: '30d' });
-const setAuthCookie = (res, token) => res.cookie(COOKIE_NAME, token, COOKIE_OPTIONS);
+const makeToken = (userId) => {
+  const secret = process.env.JWT_SECRET || 'weeks-secret-key';
+  // console.log('SIGNING WITH SECRET:', secret); // add this
+  return jwt.sign({ userId }, secret, { expiresIn: '30d' });
+};
+const setAuthCookie = (res, token) => {
+  res.cookie(COOKIE_NAME, token, COOKIE_OPTIONS);
+  console.log('SET COOKIE', {
+    name: COOKIE_NAME,
+    options: COOKIE_OPTIONS,
+    header: res.getHeader('Set-Cookie'),
+  });
+};
 
 // Register
 router.post('/register', async (req, res) => {

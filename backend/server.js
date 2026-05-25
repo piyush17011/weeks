@@ -1,17 +1,27 @@
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Must call before anything else — but in ESM this still won't help
+// because imports are hoisted. Use dotenv/config import instead:
+dotenv.config({ path: path.join(__dirname, '.env') });
+
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import authRoutes from './routes/auth.js';
 import weekRoutes from './routes/weeks.js';
 import milestoneRoutes from './routes/milestones.js';
 import analyticsRoutes from './routes/analytics.js';
-
-dotenv.config();
+import cookieParser from 'cookie-parser';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+app.use(cookieParser());
 app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173', credentials: true }));
 app.use(express.json());
 
