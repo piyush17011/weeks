@@ -1,0 +1,299 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg:      #0d0d0f;
+    --surface: #161618;
+    --border:  #252528;
+    --border2: #303035;
+    --text:    #e8e6e1;
+    --sub:     #7a7880;
+    --dim:     #3a3840;
+
+    /* accent — warm amber, not white/grey */
+    --accent:  #c9a96e;
+    --accent2: #e8c98a;
+    --lived:   #c9a96e;
+    --future:  #252528;
+    --cell:    11px;
+    --gap:     2px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; height: 100%; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Geist Mono', monospace;
+    font-weight: 300;
+    font-size: 13px;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100%;
+  }
+
+  ::selection { background: rgba(201,169,110,0.2); }
+
+  ::-webkit-scrollbar { width: 3px; height: 3px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
+
+  input, textarea, button { font-family: inherit; }
+
+  input, textarea {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-size: 13px;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--text);
+    -webkit-box-shadow: 0 0 0 1000px var(--surface) inset;
+  }
+}
+
+/* ── Typography ──────────────────────────────── */
+.serif      { font-family: 'Libre Baskerville', serif; }
+.mono       { font-family: 'Geist Mono', monospace; }
+
+.label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sub);
+  font-weight: 400;
+}
+
+.value-big {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 2.4rem;
+  color: var(--text);
+  line-height: 1;
+  font-weight: 400;
+}
+
+/* ── Buttons ─────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--sub);
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+  font-weight: 500;
+}
+.btn-primary:hover { background: var(--accent2); border-color: var(--accent2); color: var(--bg); }
+
+.btn:disabled { opacity: 0.3; pointer-events: none; }
+
+/* ── Fields ──────────────────────────────────── */
+.field {
+  border-bottom: 1px solid var(--border);
+  padding: 8px 0;
+  transition: border-color 0.2s;
+}
+.field:focus-within { border-bottom-color: var(--accent); }
+.field input, .field textarea { width: 100%; color: var(--text); }
+.field-label {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sub);
+  margin-bottom: 4px;
+  font-weight: 400;
+}
+
+/* ── Grid cells ──────────────────────────────── */
+.cell {
+  width: var(--cell);
+  height: var(--cell);
+  flex-shrink: 0;
+  background: var(--future);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: transform 0.1s, border-color 0.1s, background 0.1s;
+  position: relative;
+}
+
+.cell.lived {
+  background: var(--lived);
+  border-color: var(--lived);
+  opacity: 0.75;
+}
+
+.cell.has-entry {
+  opacity: 1;
+}
+
+.cell.current {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  opacity: 1;
+  animation: cellPulse 2.5s ease-in-out infinite;
+}
+
+.cell.birthday {
+  background: #8b5cf6 !important;
+  border-color: #8b5cf6 !important;
+  opacity: 1 !important;
+}
+
+.cell.milestone-mark {
+  border-color: var(--accent2) !important;
+}
+
+.cell:hover {
+  transform: scale(1.6);
+  z-index: 20;
+  border-color: var(--accent2) !important;
+  opacity: 1 !important;
+}
+
+@keyframes cellPulse {
+  0%, 100% { opacity: 0.7; }
+  50%       { opacity: 1; }
+}
+
+/* ── Tooltip ─────────────────────────────────── */
+.tooltip {
+  position: fixed;
+  pointer-events: none;
+  z-index: 200;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  padding: 10px 14px;
+  min-width: 190px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+/* ── Sidebar year labels ─────────────────────── */
+.year-label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  color: var(--sub);
+  width: 28px;
+  text-align: right;
+  flex-shrink: 0;
+  line-height: var(--cell);
+  user-select: none;
+  font-weight: 400;
+}
+
+.month-label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 9px;
+  color: var(--dim);
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* ── Settings panel ──────────────────────────── */
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(13,13,15,0.85);
+  backdrop-filter: blur(6px);
+}
+.settings-panel {
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  width: 360px;
+  background: var(--surface);
+  border-left: 1px solid var(--border2);
+  z-index: 301;
+  overflow-y: auto;
+  padding: 32px 28px;
+}
+
+/* ── Toggle switch ───────────────────────────── */
+.toggle {
+  width: 36px; height: 20px;
+  background: var(--dim);
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+  border: none;
+}
+.toggle.on { background: var(--accent); }
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: white;
+  transition: transform 0.2s;
+}
+.toggle.on::after { transform: translateX(16px); }
+
+/* ── Day card ────────────────────────────────── */
+.day-card {
+  border: 1px solid var(--border);
+  transition: border-color 0.15s;
+}
+.day-card:has(.day-body:not(.hidden)) { border-color: var(--border2); }
+.day-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  cursor: pointer;
+  user-select: none;
+}
+.day-body {
+  padding: 0 14px 14px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Mood pills ──────────────────────────────── */
+.mood-pill {
+  padding: 3px 10px;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  border: 1px solid var(--border2);
+  cursor: pointer;
+  transition: all 0.15s;
+  background: transparent;
+  color: var(--sub);
+  border-radius: 2px;
+}
+.mood-pill.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+  font-weight: 500;
+}
+
+/* ── Animations ──────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.35s ease forwards; }
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+.slide-in { animation: slideIn 0.25s ease forwards; }
